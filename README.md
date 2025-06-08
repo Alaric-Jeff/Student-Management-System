@@ -14,7 +14,7 @@
 
 ## 📌 Overview
 
-**Student Management System API** is a backend application that powers academic and administrative operations such as student enrollment, attendance tracking, grade management, and scheduling. Built for performance and scalability using Fastify and Prisma ORM.
+**Student Management System API** is a Fullstack application that powers academic and administrative operations such as student enrollment, attendance tracking, grade management, and scheduling. Built for performance and scalability using Fastify and Prisma ORM.
 
 ---
 
