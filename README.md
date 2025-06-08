@@ -1,37 +1,76 @@
-# Student Management System (Fastify + PostgreSQL)
+<h1 align="center">🎓 Student Management System API</h1>
+<p align="center">
+  A robust backend system built with Fastify, PostgreSQL, and Prisma to manage students, courses, attendance, grades, and more.
+</p>
 
-A **Student Management System (SMS)** built with **Fastify** and **PostgreSQL**, using **Prisma ORM** for elegant and type-safe database access. This system helps educational institutions manage student records, attendance, grades, and administrative tasks efficiently.
+<p align="center">
+  <img src="https://img.shields.io/badge/Fastify-000000?style=flat-square&logo=fastify&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Node.js-339933?style=flat-square&logo=node.js&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white"/>
+</p>
 
-## 🧩 Features
+---
 
-- **Student Enrollment & Registration**  
-  Add and manage student profiles.
+## 📌 Overview
 
-- **Attendance Tracking**  
-  Record daily or subject-wise attendance.
+**Student Management System API** is a backend application that powers academic and administrative operations such as student enrollment, attendance tracking, grade management, and scheduling. Built for performance and scalability using Fastify and Prisma ORM.
 
-- **Grades & Exam Management**  
-  Input exam scores, calculate averages, and generate report cards.
+---
 
-- **Course Scheduling**  
-  Assign students to courses and manage class timetables.
+## 🎯 Features
 
-- **Fee Management**  
-  Track payments and outstanding balances.
+- 👨‍🎓 Student enrollment & profile management  
+- 🗓️ Attendance tracking  
+- 🧮 Grade input, report card generation  
+- 📚 Course assignment & scheduling  
+- 💵 Fee tracking and payment logs  
+- 📬 Notifications for parents/guardians  
+- 📊 Reporting and analytics dashboard-ready  
+- 🔒 JWT authentication & route protection  
 
-- **Parent-Teacher Communication**  
-  Send notifications or updates to parents.
+---
 
-- **Reports & Analytics**  
-  Generate academic and administrative reports.
+## 🛠️ Tech Stack
 
-## ⚙️ Tech Stack
+### 🚀 Backend
 
-- **Backend:** [Fastify](https://www.fastify.dev/) (Node.js framework)
-- **Database:** [PostgreSQL](https://www.postgresql.org/) (Relational DB)
-- **ORM:** [Prisma](https://www.prisma.io/) (Type-safe query builder)
-- **Authentication:** JWT (JSON Web Tokens) or sessions
-- **Environment Config:** dotenv
+- **Fastify** (lightweight and high-performance Node.js framework)  
+- **PostgreSQL** (relational database for structured academic data)  
+- **Prisma** (type-safe ORM)  
+- **JWT** for stateless authentication  
+- **dotenv** for environment configuration  
 
-## 📁 Project Structure
+### 📦 Core Packages
 
+- `@fastify/jwt` — authentication  
+- `@fastify/cors` — CORS handling  
+- `@fastify/env` — config validation  
+- `prisma` — database ORM  
+- `bcrypt` — password hashing  
+- `zod` (optional) — request validation
+
+---
+
+## 📂 Project Structure
+
+```bash
+student-management-system/
+│
+├─ prisma/
+│   ├─ schema.prisma         # Prisma data models
+│   └─ migrations/           # DB migration history
+│
+├─ src/
+│   ├─ routes/               # Fastify route definitions
+│   ├─ controllers/          # Business logic
+│   ├─ models/               # Prisma model access
+│   ├─ plugins/              # Fastify plugins (e.g., DB, JWT)
+│   ├─ middlewares/          # Auth & request validation
+│   ├─ utils/                # Helper functions
+│   └─ server.js             # Main entry point
+│
+├─ .env                      # Environment variables
+├─ .gitignore
+├─ package.json
+└─ README.md
