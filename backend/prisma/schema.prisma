@@ -140,6 +140,9 @@ model Program {
   students Student[]
   department Department @relation(fields: [departmentId], references: [id])
   departmentId Int
+
+  @@index([programName])
+  @@index([departmentId])
 }
 
 model Department {
@@ -150,22 +153,29 @@ model Department {
   professors Professor[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([name])
 }
 
 model Student {
-  id Int @id @default(autoincrement())
+  id Int @id 
   firstName String @default("N/A")
   middleName String @default("N/A")
   lastName String @default("N/A")
   email String @unique @default("N/A")
   password String @default("N/A")
   studentInformation StudentInformation?
-  status Status
+  status Status @default(regular)
   program Program @relation(fields: [programId], references: [programId])
-  programId Int
+  programId Int? 
   enrollments Enrollment[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([status])
+  @@index([programId])
+  @@index([lastName, firstName])
 }
 
 model Professor {
@@ -182,6 +192,11 @@ model Professor {
   type Professors
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([departmentId])
+  @@index([type])
+  @@index([lastName, firstName])
 }
 
 model ProfessorInformation {
@@ -194,6 +209,8 @@ model ProfessorInformation {
   contactNumber String @default("N/A")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([professorId])
 }
 
 model StudentInformation {
@@ -226,6 +243,8 @@ model StudentInformation {
   fatherContact String @default("N/A")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([studentId])
 }
 
 model Subject {
@@ -239,6 +258,9 @@ model Subject {
   enrollments Enrollment[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([code, name])
+  @@index([professorId])
 }
 
 model Enrollment {
@@ -253,6 +275,9 @@ model Enrollment {
   updatedAt DateTime @updatedAt
 
   @@unique([studentId, subjectId])
+  @@index([studentId, status])
+  @@index([subjectId, status])
+  @@index([grade])
 }
 
 
