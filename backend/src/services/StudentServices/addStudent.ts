@@ -1,23 +1,20 @@
 import { PrismaClient } from "@prisma/client";
+import logger from "../../utils/logger.js";
+import isExisting from "./isExisting.js";
 
 const prisma = new PrismaClient();
 
-async function AddStudent(studentId: string, password: string, firstName: string, lastName: string, middleName: string){
+async function AddStudent(id: number, email: string, password: string, firstName: string, lastName: string, middleName: string){
     try{
 
-        const existingStudent = await prisma.student.findUnique({
-            where: {
-                id: studentId
-            }
-        });
-
-        if(existingStudent){
-            throw new Error('Student already exists');
+        if(await isExisting(id)){
+            throw new Error('Student already exist');
         }
 
         await prisma.student.create({
             data: {
-                id: studentId,
+                id: id,
+                email: email,
                 password: password,
                 firstName: firstName,
                 lastName: lastName,
