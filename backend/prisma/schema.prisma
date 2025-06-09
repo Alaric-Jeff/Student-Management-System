@@ -1,0 +1,258 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Professors {
+  FULL_TIME
+  PART_TIME
+  ADJUNCT
+  VISITING
+  EMERITUS
+}
+
+enum Courses {
+  UNDERGRADUATE
+  GRADUATE
+  DOCTORAL
+  CERTIFICATE
+  DIPLOMA
+}
+
+enum ProgramCategory {
+  LIBERAL_ARTS_AND_SCIENCES
+  BUSINESS_AND_ACCOUNTANCY
+  ENGINEERING_AND_ARCHITECTURE
+  EDUCATION
+  CRIMINOLOGY
+  COMPUTING_STUDIES
+  NURSING
+  MEDICAL_TECHNOLOGY
+  TOURISM
+  ARTS_AND_DESIGN
+}
+
+enum Programs {
+  // Liberal Arts and Sciences
+  BS_BIOLOGY
+  BS_CHEMISTRY
+  BS_MATHEMATICS
+  BS_PHYSICS
+  BS_PSYCHOLOGY
+  BA_COMMUNICATION
+  BA_POLITICAL_SCIENCE
+  BA_SOCIOLOGY
+  BA_ENGLISH
+  BA_HISTORY
+
+  // Business and Accountancy
+  BS_ACCOUNTANCY
+  BS_BUSINESS_ADMINISTRATION
+  BS_MARKETING
+  BS_FINANCIAL_MANAGEMENT
+  BS_HUMAN_RESOURCE_MANAGEMENT
+  BS_ENTREPRENEURSHIP
+  BS_INTERNATIONAL_BUSINESS
+  BS_MANAGEMENT_ACCOUNTING
+  BS_BUSINESS_ECONOMICS
+  BS_OFFICE_ADMINISTRATION
+
+  // Engineering and Architecture
+  BS_CIVIL_ENGINEERING
+  BS_ELECTRICAL_ENGINEERING
+  BS_MECHANICAL_ENGINEERING
+  BS_INDUSTRIAL_ENGINEERING
+  BS_CHEMICAL_ENGINEERING
+  BS_ELECTRONICS_ENGINEERING
+  BS_COMPUTER_ENGINEERING
+  BS_ARCHITECTURE
+  BS_INDUSTRIAL_DESIGN
+  BS_MANUFACTURING_ENGINEERING
+
+  // Education
+  BS_ELEMENTARY_EDUCATION
+  BS_SECONDARY_EDUCATION
+  BS_SPECIAL_EDUCATION
+  BS_PHYSICAL_EDUCATION
+  BS_EARLY_CHILDHOOD_EDUCATION
+
+  // Criminology
+  BS_CRIMINOLOGY
+  BS_FORENSIC_SCIENCE
+  BS_CRIMINAL_JUSTICE
+  BS_LAW_ENFORCEMENT
+  BS_SECURITY_MANAGEMENT
+
+  // Computing Studies
+  BS_INFORMATION_TECHNOLOGY
+  BS_COMPUTER_SCIENCE
+  BS_INFORMATION_SYSTEMS
+  BS_DIGITAL_FORENSICS
+  BS_CYBERSECURITY
+
+  // Nursing
+  BS_NURSING
+  BS_MIDWIFERY
+  BS_PHARMACY
+  BS_MEDICAL_TECHNOLOGY
+  BS_RADIOLOGIC_TECHNOLOGY
+
+  // Tourism
+  BS_TOURISM_MANAGEMENT
+  BS_HOSPITALITY_MANAGEMENT
+  BS_TRAVEL_MANAGEMENT
+  BS_CULINARY_ARTS
+  BS_HOTEL_AND_RESTAURANT_MANAGEMENT
+
+  // Arts and Design
+  BS_FINE_ARTS
+  BS_INTERIOR_DESIGN
+  BS_FASHION_DESIGN
+  BS_MULTIMEDIA_ARTS
+  BS_GRAPHIC_DESIGN
+}
+
+enum Payment {
+  stripe
+  paypal
+}
+
+enum Status {
+  regular
+  irregular
+}
+
+model Program {
+  programId Int @id @default(autoincrement())
+  programName String
+  description String? @default("N/A")
+  students Student[]
+  department Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+}
+
+model Department {
+  id Int @id @default(autoincrement())
+  name String
+  description String? @default("N/A")
+  programs Program[]
+  professors Professor[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Student {
+  id Int @id @default(autoincrement())
+  firstName String @default("N/A")
+  middleName String @default("N/A")
+  lastName String @default("N/A")
+  email String @unique @default("N/A")
+  password String @default("N/A")
+  studentInformation StudentInformation?
+  status Status
+  program Program @relation(fields: [programId], references: [programId])
+  programId Int
+  enrollments Enrollment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Professor {
+  id Int @id @default(autoincrement())
+  firstName String @default("N/A")
+  lastName String @default("N/A")
+  middleName String @default("N/A")
+  email String @default("N/A")
+  password String @default("N/A")
+  department Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  subjects Subject[]
+  professorInformation ProfessorInformation?
+  type Professors
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProfessorInformation {
+  id Int @id @default(autoincrement())
+  professor Professor @relation(fields: [professorId], references: [id])
+  professorId Int @unique
+  sex String @default("N/A")
+  placeOfBirth String @default("N/A")
+  address String @default("N/A")
+  contactNumber String @default("N/A")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model StudentInformation {
+  id Int @id @default(autoincrement())
+  student Student @relation(fields: [studentId], references: [id])
+  studentId Int @unique
+  address String @default("N/A")
+  sex String @default("N/A")
+  placeOfBirth String @default("N/A")
+  province String @default("N/A")
+  city String @default("N/A")
+  barangay String @default("N/A")
+  zone Int @default(1)
+  district Int @default(1)
+  civilStatus String @default("N/A")
+  zipCode Int @default(1)
+  nationality String @default("N/A")
+  religion String @default("N/A")
+  contactNumber String @default("N/A")
+  mobileNumber String @default("N/A")
+  height Float @default(0.0)
+  weight Float @default(0.0)
+  fatherName String @default("N/A")
+  motherName String @default("N/A")
+  guardianName String @default("N/A")
+  motherOccupation String @default("N/A")
+  fatherOccupation String @default("N/A")
+  guardianRelationship String @default("N/A")
+  motherContact String @default("N/A")
+  fatherContact String @default("N/A")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subject {
+  id Int @id @default(autoincrement())
+  code String @unique
+  name String
+  description String?
+  units Int
+  professor Professor @relation(fields: [professorId], references: [id])
+  professorId Int
+  enrollments Enrollment[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Enrollment {
+  id Int @id @default(autoincrement())
+  student Student @relation(fields: [studentId], references: [id])
+  studentId Int
+  subject Subject @relation(fields: [subjectId], references: [id])
+  subjectId Int
+  status Status
+  grade Float?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, subjectId])
+}
+
+
