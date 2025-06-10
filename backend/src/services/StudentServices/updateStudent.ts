@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import logger from "../../utils/logger.js";
-import isExisting from "./isExisting.js";
+import isExisting from "./isStudentExists.js";
 
 const prisma = new PrismaClient();
 

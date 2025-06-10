@@ -1,31 +1,31 @@
-import { PrismaClient } from "@prisma/client";
+import { FastifyInstance } from "fastify";
 import logger from "../../utils/logger.js";
-import isExisting from "./isExisting.js";
+import isExistingService from "./isStudentExists.js";
 
+function deleteStudentService(fastify: FastifyInstance) {
+    return async function deleteStudent(id: number) {
+        try {
 
-async function DeleteStudent(id: number) {
-    const prisma = new PrismaClient();
-
-    try {
-        if (!await isExisting(id)) {
-            throw new Error('Student does not exist');
-        }
-
-        await prisma.student.delete({
-            where: {
-                id: id
+            const isExisting = await isExistingService(fastify);
+            
+            if (!await isExisting(id)) {
+                throw new Error('Student does not exist');
             }
-        });
 
-        logger.info(`Student with ID ${id} deleted successfully.`);
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-            logger.error(`Error deleting student: ${err.message}`);
-        } else {
-            logger.error('An unknown error occurred while deleting the student');
-        }
-        throw err;
-    } 
+            await fastify.prisma.student.delete({
+                where: { id }
+            });
+
+            logger.info(`Student with ID ${id} deleted successfully.`);
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                logger.error(`Error deleting student: ${err.message}`);
+            } else {
+                logger.error('An unknown error occurred while deleting the student');
+            }
+            throw err;
+        } 
+    }
 }
 
-export default DeleteStudent;
+export default deleteStudentService;

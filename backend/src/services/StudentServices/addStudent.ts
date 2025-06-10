@@ -1,21 +1,37 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { FastifyInstance } from "fastify";
 import logger from "../../utils/logger.js";
-import isExisting from "./isExisting.js";
+import isExistingService from "./isStudentExists.js";
 import bcrypt from "bcryptjs";
 
-async function addStudentService(prisma: PrismaClient) {
+async function addStudentService(fastify: FastifyInstance) {
     return async function addStudent(
-        id: number, email: string, password: string, firstName: string, lastName: string, middleName: string
+        id: number, 
+        email: string, 
+        password: string, 
+        firstName: string, 
+        lastName: string, 
+        middleName: string
     ){
         try{
-            
+            const hashedPassword = await bcrypt.hash(password, 10);
+            await fastify.prisma.student.create({
+                data: {
+                    id,
+                    email,
+                    password: hashedPassword,
+                    firstName,
+                    lastName,
+                    middleName
+                }
+            });
+
         }catch(err: unknown){
             if(err instanceof Error){
-                logger.error("Error occured in add student ", err.message)
+                logger.error("Error occurred in add student ", err.message)
                 throw new Error("Error in adding student")
             }else{
-                logger.error("Unknown error occured in adding the student: ", err)
-                throw new Error("Unknown error occured in adding the student")
+                logger.error("Unknown error occurred in adding the student: ", err)
+                throw new Error("Unknown error occurred in adding the student")
             }
         }
     }
