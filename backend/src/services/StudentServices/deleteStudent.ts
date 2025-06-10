@@ -25,9 +25,7 @@ async function DeleteStudent(id: number) {
             logger.error('An unknown error occurred while deleting the student');
         }
         throw err;
-    } finally {
-        await prisma.$disconnect();
-    }
+    } 
 }
 
 export default DeleteStudent;
