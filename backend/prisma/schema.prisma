@@ -131,6 +131,7 @@ enum Payment {
 enum Status {
   regular
   irregular
+  graduated
 }
 
 model Program {

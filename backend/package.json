@@ -16,6 +16,7 @@
   "type": "module",
   "dependencies": {
     "@prisma/client": "^6.9.0",
+    "@sinclair/typebox": "^0.34.33",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
