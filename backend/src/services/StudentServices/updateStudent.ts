@@ -1,24 +1,31 @@
-import { PrismaClient } from "@prisma/client";
+import { FastifyInstance } from "fastify";
 import logger from "../../utils/logger.js";
-import isExisting from "./isStudentExists.js";
+import isExistingService from "./isStudentExists.js";
 
-const prisma = new PrismaClient();
+async function UpdateStudentService(fastify: FastifyInstance){
+    return async function updateStudent(id: number, updateColumns: object){
+        try{
+            const isExisting = await isExistingService(fastify);
 
-async function UpdateStudent(id: number, updateData: object){
-    try{
+            if(!(await isExisting(id))){
+                throw new Error("Student with this ID does not exist");
+            }
 
-        if(!await isExisting(id)){
-            throw new Error('Student does not exist');
+            await fastify.prisma.student.update({
+                where: { id },
+                data: updateColumns 
+            })
+            logger.info(`Student with ID ${id} updated successfully`);
+        }catch(err: unknown){
+            if(err instanceof Error){
+                logger.error("Error occurred in update student ", err.message);
+                throw new Error("Error in updating student");
+            }else{
+                logger.error("Unknown error occurred in updating the student: ", err);
+                throw new Error("Unknown error occurred in updating the student");
+            }
         }
-
-    }catch(err: unknown){
-        if (err instanceof Error) {
-            console.error(`Error updating student: ${err.message}`);
-        } else {
-            console.error('An unknown error occurred while updating the student');
-        }
-        throw err; 
     }
 };
 
-export default UpdateStudent;
+export default UpdateStudentService;
