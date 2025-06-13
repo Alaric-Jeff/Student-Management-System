@@ -12,6 +12,13 @@ async function addStudentService(fastify: FastifyInstance) {
         lastName: string, 
         middleName: string
     ){
+
+        const isExisting = await isExistingService(fastify);
+
+        if(await isExisting(id)){
+            throw new Error("Student with this ID already exists");
+        }
+
         try{
             const hashedPassword = await bcrypt.hash(password, 10);
             await fastify.prisma.student.create({
